@@ -1,0 +1,233 @@
+{# 访客详情页面模板 #}
+{% extends '@EasyAdmin/crud/detail.html.twig' %}
+
+{# 自定义页面标题 #}
+{% block content_title %}
+    访客详情 - {{ entity.instance.name }}
+{% endblock %}
+
+{# 主要内容区域 #}
+{% block main %}
+    <div class="visitor-detail-wrapper">
+        {# 访客基本信息卡片 #}
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fa fa-user me-2"></i>访客基本资料
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">访客姓名</div>
+                            <div class="field-value fw-bold">{{ entity.instance.name }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">手机号码</div>
+                            <div class="field-value">{{ entity.instance.mobile }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">公司名称</div>
+                            <div class="field-value">{{ entity.instance.company ?: '未提供' }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">联系人</div>
+                            <div class="field-value">{{ entity.instance.contactPerson ?: '未提供' }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">身份证号</div>
+                            <div class="field-value">{{ entity.instance.idCard ?: '未提供' }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">车牌号</div>
+                            <div class="field-value">{{ entity.instance.vehicleNumber ?: '无' }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">关联用户ID</div>
+                            <div class="field-value">{{ entity.instance.bizUserId ?: '无' }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">访客状态</div>
+                            <div class="field-value">
+                                {% set status = entity.instance.status %}
+                                {% set badgeClass = 'secondary' %}
+                                {% if status.value == 'pending' %}
+                                    {% set badgeClass = 'warning' %}
+                                {% elseif status.value == 'approved' %}
+                                    {% set badgeClass = 'success' %}
+                                {% elseif status.value == 'rejected' %}
+                                    {% set badgeClass = 'danger' %}
+                                {% elseif status.value == 'signed_in' %}
+                                    {% set badgeClass = 'info' %}
+                                {% elseif status.value == 'signed_out' %}
+                                    {% set badgeClass = 'secondary' %}
+                                {% elseif status.value == 'cancelled' %}
+                                    {% set badgeClass = 'dark' %}
+                                {% endif %}
+                                <span class="badge bg-{{ badgeClass }}">{{ status.label }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">来访事由</div>
+                            <div class="field-value">{{ entity.instance.reason }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# 来访时间信息卡片 #}
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fa fa-clock me-2"></i>来访时间信息
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">预约时间</div>
+                            <div class="field-value">
+                                {% if entity.instance.appointmentTime %}
+                                    {{ entity.instance.appointmentTime|date('Y-m-d H:i:s') }}
+                                {% else %}
+                                    未设置
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">签入时间</div>
+                            <div class="field-value">
+                                {% if entity.instance.signInTime %}
+                                    <span class="text-success">
+                                        <i class="fa fa-check-circle me-1"></i>
+                                        {{ entity.instance.signInTime|date('Y-m-d H:i:s') }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted">未签入</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">签出时间</div>
+                            <div class="field-value">
+                                {% if entity.instance.signOutTime %}
+                                    <span class="text-primary">
+                                        <i class="fa fa-sign-out-alt me-1"></i>
+                                        {{ entity.instance.signOutTime|date('Y-m-d H:i:s') }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted">未签出</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">创建时间</div>
+                            <div class="field-value">
+                                {% if entity.instance.createTime %}
+                                    {{ entity.instance.createTime|date('Y-m-d H:i:s') }}
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">更新时间</div>
+                            <div class="field-value">
+                                {% if entity.instance.updateTime %}
+                                    {{ entity.instance.updateTime|date('Y-m-d H:i:s') }}
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# 访问统计信息卡片（预留，可后续扩展显示访客日志等信息） #}
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">
+                    <i class="fa fa-history me-2"></i>访问记录统计
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info mb-0">
+                    <i class="fa fa-info-circle me-2"></i>
+                    访客日志和详细访问记录可在"访客日志管理"模块中查看。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# 保留原始的删除表单 #}
+    {% block delete_form %}
+        {{ include('@EasyAdmin/crud/includes/_delete_form.html.twig', { entity_id: entity.primaryKeyValue }, with_context = false) }}
+    {% endblock delete_form %}
+{% endblock %}
+
+{# 自定义样式 #}
+{% block configured_stylesheets %}
+    {{ parent() }}
+    <style>
+        .visitor-detail-wrapper .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        .visitor-detail-wrapper .card-header {
+            border-bottom: none;
+            padding: 1rem 1.25rem;
+        }
+        .visitor-detail-wrapper .card-header h5 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .visitor-detail-wrapper .field-group {
+            padding: 0.5rem 0;
+        }
+        .visitor-detail-wrapper .field-label {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+        .visitor-detail-wrapper .field-value {
+            font-size: 1rem;
+            color: #212529;
+        }
+        .visitor-detail-wrapper .badge {
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
+        }
+        .visitor-detail-wrapper .alert {
+            border-left: 4px solid #0dcaf0;
+        }
+    </style>
+{% endblock %}

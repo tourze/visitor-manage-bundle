@@ -1,0 +1,348 @@
+{# 访客邀请详情页面模板 #}
+{% extends '@EasyAdmin/crud/detail.html.twig' %}
+
+{# 自定义页面标题 #}
+{% block content_title %}
+    访客邀请详情 - {{ entity.instance.inviteCode }}
+{% endblock %}
+
+{# 主要内容区域 #}
+{% block main %}
+    <div class="visitor-invitation-detail-wrapper">
+        {# 邀请基本信息卡片 #}
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fa fa-envelope me-2"></i>邀请基本信息
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">邀请码</div>
+                            <div class="field-value fw-bold">
+                                <code class="text-primary">{{ entity.instance.inviteCode }}</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">邀请状态</div>
+                            <div class="field-value">
+                                {% set status = entity.instance.status %}
+                                {% set badgeClass = 'secondary' %}
+                                {% if status.value == 'pending' %}
+                                    {% set badgeClass = 'warning' %}
+                                {% elseif status.value == 'confirmed' %}
+                                    {% set badgeClass = 'success' %}
+                                {% elseif status.value == 'rejected' %}
+                                    {% set badgeClass = 'danger' %}
+                                {% elseif status.value == 'expired' %}
+                                    {% set badgeClass = 'secondary' %}
+                                {% endif %}
+                                <span class="badge bg-{{ badgeClass }}">{{ status.label }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">邀请人ID</div>
+                            <div class="field-value">
+                                {% if entity.instance.inviter %}
+                                    <span class="badge bg-info">{{ entity.instance.inviter }}</span>
+                                {% else %}
+                                    <span class="text-muted">未设置</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">邀请ID</div>
+                            <div class="field-value">
+                                <span class="text-muted">#{{ entity.instance.id }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# 被邀请访客信息卡片 #}
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fa fa-user me-2"></i>被邀请访客信息
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if entity.instance.visitor %}
+                    {% set visitor = entity.instance.visitor %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="field-group">
+                                <div class="field-label text-muted">访客姓名</div>
+                                <div class="field-value fw-bold">{{ visitor.name }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="field-group">
+                                <div class="field-label text-muted">手机号码</div>
+                                <div class="field-value">{{ visitor.mobile }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="field-group">
+                                <div class="field-label text-muted">公司名称</div>
+                                <div class="field-value">{{ visitor.company ?: '未提供' }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="field-group">
+                                <div class="field-label text-muted">联系人</div>
+                                <div class="field-value">{{ visitor.contactPerson ?: '未提供' }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="field-group">
+                                <div class="field-label text-muted">身份证号</div>
+                                <div class="field-value">{{ visitor.idCard ?: '未提供' }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="field-group">
+                                <div class="field-label text-muted">车牌号</div>
+                                <div class="field-value">{{ visitor.vehicleNumber ?: '无' }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="field-group">
+                                <div class="field-label text-muted">访客状态</div>
+                                <div class="field-value">
+                                    {% set visitorStatus = visitor.status %}
+                                    {% set visitorBadgeClass = 'secondary' %}
+                                    {% if visitorStatus.value == 'pending' %}
+                                        {% set visitorBadgeClass = 'warning' %}
+                                    {% elseif visitorStatus.value == 'approved' %}
+                                        {% set visitorBadgeClass = 'success' %}
+                                    {% elseif visitorStatus.value == 'rejected' %}
+                                        {% set visitorBadgeClass = 'danger' %}
+                                    {% elseif visitorStatus.value == 'signed_in' %}
+                                        {% set visitorBadgeClass = 'info' %}
+                                    {% elseif visitorStatus.value == 'signed_out' %}
+                                        {% set visitorBadgeClass = 'secondary' %}
+                                    {% elseif visitorStatus.value == 'cancelled' %}
+                                        {% set visitorBadgeClass = 'dark' %}
+                                    {% endif %}
+                                    <span class="badge bg-{{ visitorBadgeClass }}">{{ visitorStatus.label }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="field-group">
+                                <div class="field-label text-muted">来访事由</div>
+                                <div class="field-value">{{ visitor.reason }}</div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning mb-0">
+                        <i class="fa fa-exclamation-triangle me-2"></i>
+                        未关联访客信息
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# 时间信息卡片 #}
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fa fa-clock me-2"></i>时间信息
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">创建时间</div>
+                            <div class="field-value">
+                                {% if entity.instance.createTime %}
+                                    {{ entity.instance.createTime|date('Y-m-d H:i:s') }}
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">过期时间</div>
+                            <div class="field-value">
+                                {% if entity.instance.expireTime %}
+                                    {% set now = "now"|date('U') %}
+                                    {% set expireTimestamp = entity.instance.expireTime|date('U') %}
+                                    {% if expireTimestamp < now %}
+                                        <span class="text-danger">
+                                            <i class="fa fa-times-circle me-1"></i>
+                                            {{ entity.instance.expireTime|date('Y-m-d H:i:s') }}
+                                            <small>(已过期)</small>
+                                        </span>
+                                    {% else %}
+                                        <span class="text-success">
+                                            <i class="fa fa-check-circle me-1"></i>
+                                            {{ entity.instance.expireTime|date('Y-m-d H:i:s') }}
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">未设置</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="field-group">
+                            <div class="field-label text-muted">有效时长</div>
+                            <div class="field-value">
+                                {% if entity.instance.createTime and entity.instance.expireTime %}
+                                    {% set createTimestamp = entity.instance.createTime|date('U') %}
+                                    {% set expireTimestamp = entity.instance.expireTime|date('U') %}
+                                    {% set duration = expireTimestamp - createTimestamp %}
+                                    {% set hours = (duration / 3600)|round(0, 'floor') %}
+                                    {% set minutes = ((duration % 3600) / 60)|round(0, 'floor') %}
+                                    <span class="badge bg-secondary">
+                                        {% if hours > 0 %}
+                                            {{ hours }}小时
+                                        {% endif %}
+                                        {% if minutes > 0 %}
+                                            {{ minutes }}分钟
+                                        {% endif %}
+                                    </span>
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# 访问记录统计卡片（预留） #}
+        {% if entity.instance.visitor %}
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fa fa-history me-2"></i>访客访问记录
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% set visitor = entity.instance.visitor %}
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <tbody>
+                                <tr>
+                                    <td class="text-muted" style="width: 150px;">预约时间</td>
+                                    <td>
+                                        {% if visitor.appointmentTime %}
+                                            {{ visitor.appointmentTime|date('Y-m-d H:i:s') }}
+                                        {% else %}
+                                            <span class="text-muted">未设置</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">签入时间</td>
+                                    <td>
+                                        {% if visitor.signInTime %}
+                                            <span class="text-success">
+                                                <i class="fa fa-check-circle me-1"></i>
+                                                {{ visitor.signInTime|date('Y-m-d H:i:s') }}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">未签入</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">签出时间</td>
+                                    <td>
+                                        {% if visitor.signOutTime %}
+                                            <span class="text-primary">
+                                                <i class="fa fa-sign-out-alt me-1"></i>
+                                                {{ visitor.signOutTime|date('Y-m-d H:i:s') }}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">未签出</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert alert-info mb-0 mt-3">
+                        <i class="fa fa-info-circle me-2"></i>
+                        更详细的访客日志和访问记录可在"访客管理"模块中查看。
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    {# 保留原始的删除表单 #}
+    {% block delete_form %}
+        {{ include('@EasyAdmin/crud/includes/_delete_form.html.twig', { entity_id: entity.primaryKeyValue }, with_context = false) }}
+    {% endblock delete_form %}
+{% endblock %}
+
+{# 自定义样式 #}
+{% block configured_stylesheets %}
+    {{ parent() }}
+    <style>
+        .visitor-invitation-detail-wrapper .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        .visitor-invitation-detail-wrapper .card-header {
+            border-bottom: none;
+            padding: 1rem 1.25rem;
+        }
+        .visitor-invitation-detail-wrapper .card-header h5 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .visitor-invitation-detail-wrapper .field-group {
+            padding: 0.5rem 0;
+        }
+        .visitor-invitation-detail-wrapper .field-label {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+        .visitor-invitation-detail-wrapper .field-value {
+            font-size: 1rem;
+            color: #212529;
+        }
+        .visitor-invitation-detail-wrapper .field-value code {
+            font-size: 1.1rem;
+            padding: 0.25rem 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 0.25rem;
+        }
+        .visitor-invitation-detail-wrapper .badge {
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
+        }
+        .visitor-invitation-detail-wrapper .alert {
+            border-left: 4px solid #0dcaf0;
+        }
+        .visitor-invitation-detail-wrapper .table td {
+            padding: 0.75rem;
+            vertical-align: middle;
+        }
+        .visitor-invitation-detail-wrapper .table tr:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+{% endblock %}

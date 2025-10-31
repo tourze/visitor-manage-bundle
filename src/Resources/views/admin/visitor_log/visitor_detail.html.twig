@@ -1,0 +1,119 @@
+{# 访客日志详情模板 #}
+{% extends '@EasyAdmin/crud/detail.html.twig' %}
+
+{% block content_title %}访客日志详情{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                {# 日志基本信息卡片 #}
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-history me-2"></i>访客日志详情
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <td class="text-muted">日志ID:</td>
+                                        <td>{{ entity.instance.id ?? '未设置' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">访客ID:</td>
+                                        <td>{{ entity.instance.visitorId ?? '未设置' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">操作类型:</td>
+                                        <td>
+                                            {% if entity.instance.action is defined %}
+                                                <span class="badge bg-info">{{ entity.instance.action.value ?? entity.instance.action.name ?? entity.instance.action }}</span>
+                                            {% else %}
+                                                未设置
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">操作时间:</td>
+                                        <td>{{ entity.instance.timestamp ?? entity.instance.createdAt ?? entity.instance.created ?? '未设置' }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <td class="text-muted">IP地址:</td>
+                                        <td>{{ entity.instance.ipAddress ?? '未记录' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">用户代理:</td>
+                                        <td>{{ entity.instance.userAgent ?? '未记录' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">位置信息:</td>
+                                        <td>{{ entity.instance.location ?? '未记录' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">备注信息:</td>
+                                        <td>{{ entity.instance.remarks ?? '无' }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# 详细描述卡片 #}
+                {% if entity.instance.description is defined and entity.instance.description %}
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-file-text me-2"></i>操作详情
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">{{ entity.instance.description|nl2br }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# 关联数据卡片 #}
+                {% if entity.instance.relatedData is defined and entity.instance.relatedData %}
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-link me-2"></i>关联数据
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <pre class="bg-light p-3 rounded">{{ entity.instance.relatedData|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {# 自定义样式 #}
+    <style>
+        .card {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .table td {
+            padding: 0.5rem 0.75rem;
+        }
+        .text-muted {
+            font-weight: 500;
+            width: 120px;
+        }
+        pre {
+            font-size: 0.875rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+{% endblock %}

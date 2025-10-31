@@ -1,0 +1,57 @@
+parameters:
+  tourze_visitor_manage.default_pass_validity_hours: '%env(int:TOURZE_VISITOR_MANAGE_DEFAULT_PASS_VALIDITY_HOURS)%'
+  tourze_visitor_manage.max_invitation_days: '%env(int:TOURZE_VISITOR_MANAGE_MAX_INVITATION_DAYS)%'
+  tourze_visitor_manage.enable_auto_approval: '%env(bool:TOURZE_VISITOR_MANAGE_ENABLE_AUTO_APPROVAL)%'
+
+  env(TOURZE_VISITOR_MANAGE_DEFAULT_PASS_VALIDITY_HOURS): 8
+  env(TOURZE_VISITOR_MANAGE_MAX_INVITATION_DAYS): 30
+  env(TOURZE_VISITOR_MANAGE_ENABLE_AUTO_APPROVAL): false
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  Tourze\VisitorManageBundle\Repository\:
+    resource: '../../Repository/'
+  Tourze\VisitorManageBundle\Service\:
+    resource: '../../Service/'
+  Tourze\VisitorManageBundle\EventListener\:
+    resource: '../../EventListener/'
+  Tourze\VisitorManageBundle\Controller\:
+    resource: '../../Controller/'
+    
+  # Service aliases
+  tourze_visitor_manage.service.visitor:
+    alias: Tourze\VisitorManageBundle\Service\VisitorService
+  tourze_visitor_manage.service.validation:
+    alias: Tourze\VisitorManageBundle\Service\VisitorValidationService
+  tourze_visitor_manage.service.log:
+    alias: Tourze\VisitorManageBundle\Service\VisitorLogService
+  tourze_visitor_manage.service.registration:
+    alias: Tourze\VisitorManageBundle\Service\VisitorRegistrationService
+  tourze_visitor_manage.service.invitation:
+    alias: Tourze\VisitorManageBundle\Service\VisitorInvitationService
+  tourze_visitor_manage.service.approval:
+    alias: Tourze\VisitorManageBundle\Service\VisitorApprovalService
+  tourze_visitor_manage.service.pass:
+    alias: Tourze\VisitorManageBundle\Service\VisitorPassService
+  tourze_visitor_manage.service.report:
+    alias: Tourze\VisitorManageBundle\Service\VisitorReportService
+
+  # Event listener aliases
+  tourze_visitor_manage.event_listener.visitor:
+    alias: Tourze\VisitorManageBundle\EventListener\VisitorEventSubscriber
+  tourze_visitor_manage.event_listener.pass:
+    alias: Tourze\VisitorManageBundle\EventListener\PassEventSubscriber
+
+  # Repository aliases
+  tourze_visitor_manage.repository.visitor:
+    alias: Tourze\VisitorManageBundle\Repository\VisitorRepository
+  tourze_visitor_manage.repository.visitor_log:
+    alias: Tourze\VisitorManageBundle\Repository\VisitorLogRepository
+  tourze_visitor_manage.repository.visitor_invitation:
+    alias: Tourze\VisitorManageBundle\Repository\VisitorInvitationRepository
+  tourze_visitor_manage.repository.visitor_pass:
+    alias: Tourze\VisitorManageBundle\Repository\VisitorPassRepository
