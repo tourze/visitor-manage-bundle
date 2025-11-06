@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Tourze\BundleDependency\BundleDependencyInterface;
 use Tourze\DoctrineFunctionBundle\DoctrineFunctionBundle;
+use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 use Tourze\PHPUnitSymfonyKernelTest\AbstractBundleTestCase;
 use Tourze\VisitorManageBundle\VisitorManageBundle;
 
@@ -52,7 +53,7 @@ final class VisitorManageBundleTest extends AbstractBundleTestCase
         $dependencies = VisitorManageBundle::getBundleDependencies();
 
         // Assert: 验证依赖配置
-        $this->assertCount(2, $dependencies);
+        $this->assertCount(3, $dependencies);
 
         // 验证DoctrineBundle依赖
         $this->assertArrayHasKey(DoctrineBundle::class, $dependencies);
@@ -61,6 +62,10 @@ final class VisitorManageBundleTest extends AbstractBundleTestCase
         // 验证DoctrineFunctionBundle依赖
         $this->assertArrayHasKey(DoctrineFunctionBundle::class, $dependencies);
         $this->assertEquals(['all' => true], $dependencies[DoctrineFunctionBundle::class]);
+
+        // 验证EasyAdminMenuBundle依赖
+        $this->assertArrayHasKey(EasyAdminMenuBundle::class, $dependencies);
+        $this->assertEquals(['all' => true], $dependencies[EasyAdminMenuBundle::class]);
     }
 
     public function testBundleDependenciesAllHaveAllEnvironmentEnabled(): void
@@ -231,6 +236,13 @@ final class VisitorManageBundleTest extends AbstractBundleTestCase
             DoctrineFunctionBundle::class,
             $dependencies,
             'VisitorManageBundle should depend on DoctrineFunctionBundle for additional Doctrine functions'
+        );
+
+        // 验证EasyAdminMenuBundle存在
+        $this->assertArrayHasKey(
+            EasyAdminMenuBundle::class,
+            $dependencies,
+            'VisitorManageBundle should depend on EasyAdminMenuBundle for admin menu functionality'
         );
 
         // 验证依赖数量合理（防止依赖过多）
