@@ -6,7 +6,6 @@ namespace Tourze\VisitorManageBundle\Tests\Entity;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Tourze\BizUserBundle\Entity\BizUser;
 use Tourze\PHPUnitDoctrineEntity\AbstractEntityTestCase;
 use Tourze\VisitorManageBundle\Entity\Visitor;
 use Tourze\VisitorManageBundle\Enum\VisitorStatus;

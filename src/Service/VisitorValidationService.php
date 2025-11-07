@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tourze\VisitorManageBundle\Service;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-// use Tourze\BizUserBundle\Entity\BizUser; // 暂时注释，避免依赖问题
 use Tourze\VisitorManageBundle\DTO\VisitorRegistrationData;
 use Tourze\VisitorManageBundle\DTO\VisitorSearchCriteria;
 use Tourze\VisitorManageBundle\Exception\InvalidVisitorDataException;
