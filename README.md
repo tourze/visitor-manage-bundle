@@ -29,7 +29,7 @@ return [
 ];
 ```
 
-## Entities
+## Core Entities
 
 ### Visitor
 Core visitor entity with:
@@ -190,6 +190,28 @@ Run the test suite:
 - PHP 8.1+
 - Symfony 7.3+
 - Doctrine ORM
+
+## Technical Architecture
+
+### Design Principles
+- **Flat Service Layer**: Business logic concentrated in Service layer without additional layers
+- **Anemic Domain Model**: Entities contain only data and getter/setter methods, no business logic
+- **Dependency Injection**: Use Symfony DI container for service dependency management
+- **Environment Variable Configuration**: All configuration read through $_ENV
+
+### Core Features
+- Complete visitor lifecycle management
+- Multi-level approval workflow support
+- Digital passes and QR code integration
+- Comprehensive audit logging
+- Flexible event system extensions
+- Batch operations and performance optimization
+
+### Extension Capabilities
+- Event-based plugin architecture
+- Replaceable service interface implementations
+- Environment variable configuration support
+- Database field extension points
 
 ## License
 
